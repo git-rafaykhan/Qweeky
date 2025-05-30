@@ -4,7 +4,7 @@ Qweeky is a lightweight Q&A platform inspired by platforms like Stack Overflow. 
 
 ## 🔗 Project Documentation
 
-📝 [Notion Doc (Qweeky Backend)](https://www.notion.so/Qweeky-Backend-2020440d5d30809f99a5d0d96436967d)
+📝 [Notion Doc (Qweeky Backend)](https://www.notion.so/2020440d5d30809f99a5d0d96436967d?v=2030440d5d308065b53c000c4c852571&source=copy_link)
 
 ---
 
