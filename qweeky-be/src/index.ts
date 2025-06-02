@@ -111,7 +111,7 @@ app.get('/api/v1/users/:id/questions', async (req: Request, res: Response) => {
 
     return res.status(200).json({ questions: result.rows });
   } catch (error) {
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: 'Questions not found' });
   }
 })
 
@@ -296,5 +296,40 @@ app.delete('/api/v1/answers/:id', authMiddleware, async (req: Request, res: Resp
     res.status(200).json({ message: 'Answer deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+//! comments routes 
+//@ts-ignore
+app.post('/api/v1/answers/:id/comments', authMiddleware, async (req, res) => {
+  const answersId = req.params.id;
+  const { body } = req.body;
+  const userId = req.userId;
+
+  if (!body) {
+    return res.status(400).json({ message: "Comment body is required" });
+  }
+
+  try {
+    const answer = await client.query('SELECT * FROM answers WHERE id = $1', [answersId]);
+
+    if (answer.rows.length === 0) {
+      return res.status(404).json({ message: "Answer not found" });
+    }
+
+    const comment = await client.query(
+      'INSERT INTO comments (answer_id, user_id, body) VALUES ($1, $2, $3) RETURNING *',
+      [answersId, userId, body]
+    );
+
+    return res.status(200).json({
+      message: "Comment has been added",
+      answer : answer.rows[0], 
+      comment: comment.rows[0]
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 });
